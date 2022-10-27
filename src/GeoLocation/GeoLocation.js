@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function GeoLocation() {
   const [lat, setLat] = useState(0);
@@ -31,6 +32,21 @@ export default function GeoLocation() {
       setError("Geolocation is not supported by this browser.");
     }
   }, []);
+
+  useEffect(() => {
+    if (lat !== 0 && lon !== 0) {
+      axios
+        .get(
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m`
+        )
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [lat, lon]);
 
   return (
     <div>
