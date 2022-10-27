@@ -63,7 +63,8 @@ export default function GeoLocation() {
         <h1>You're in : {city}</h1>
       </div>
       <div className='weather-description'>
-        <h2>{weather}</h2>
+        <h2>{weather}</h2>{" "}
+        <h2>{description.charAt(0).toUpperCase() + description.slice(1)}</h2>
         {weather === "Clouds" && (
           <img
             src='https://img.icons8.com/color/48/000000/cloud.png'
@@ -94,10 +95,9 @@ export default function GeoLocation() {
             alt='thunderstorm'
           />
         )}
-        <h2>{description.charAt(0).toUpperCase() + description.slice(1)}</h2>
       </div>
       <div className='temp'>
-        <h3>{`${temp} \u00B0 `}</h3>
+        <h2>{`${temp} \u00B0 `}</h2>
       </div>
     </div>
   );
