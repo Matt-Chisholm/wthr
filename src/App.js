@@ -1,4 +1,5 @@
 import GeoLocation from "./WeatherApi/WeatherApi";
+import "./App.css";
 
 function App() {
   return (
