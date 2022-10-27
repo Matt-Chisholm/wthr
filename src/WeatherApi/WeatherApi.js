@@ -46,7 +46,7 @@ export default function GeoLocation() {
           console.log(response.data);
           setCity(response.data.name);
           setWeather(response.data.weather[0].main);
-          setTemp(response.data.main.temp);
+          setTemp(Math.round(response.data.main.temp - 273.15));
         })
         .catch((error) => {
           console.log(error);
@@ -63,7 +63,7 @@ export default function GeoLocation() {
         <h2>{weather}</h2>
       </div>
       <div>
-        <h3>{temp}</h3>
+        <h3>{`${temp} \u00B0 `}</h3>
       </div>
     </div>
   );
