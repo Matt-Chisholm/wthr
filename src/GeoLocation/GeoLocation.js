@@ -1,28 +1,43 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 
-export default class GeoLocation extends Component {
-  componentDidMount() {
+export default function GeoLocation() {
+  const [lat, setLat] = useState(0);
+  const [lon, setLon] = useState(0);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
     if (navigator.geolocation) {
       navigator.permissions
         .query({ name: "geolocation" })
         .then(function (result) {
           if (result.state === "granted") {
-            console.log("Geolocation is allowed");
+            navigator.geolocation.getCurrentPosition(function (position) {
+              setLat(position.coords.latitude);
+              setLon(position.coords.longitude);
+            });
           } else if (result.state === "prompt") {
-            console.log("Geolocation is allowed");
+            navigator.geolocation.getCurrentPosition(function (position) {
+              setLat(position.coords.latitude);
+              setLon(position.coords.longitude);
+            });
           } else if (result.state === "denied") {
-            console.log("Geolocation is denied");
+            setError("Permission to access location was denied");
           }
           result.onchange = function () {
-            console.log("Permission state has changed to ", result.state);
+            console.log(result.state);
           };
         });
     } else {
-      console.log("Geolocation is not supported by this browser.");
+      setError("Geolocation is not supported by this browser.");
     }
-  }
+  }, []);
 
-  render() {
-    return <div>GeoLocation</div>;
-  }
+  return (
+    <div>
+      GeoLocation
+      <div>Latitude: {lat}</div>
+      <div>Longitude: {lon}</div>
+      <div>{error ? error : null}</div>
+    </div>
+  );
 }
