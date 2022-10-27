@@ -5,6 +5,9 @@ export default function GeoLocation() {
   const [lat, setLat] = useState(0);
   const [lon, setLon] = useState(0);
   const [error, setError] = useState(null);
+  const [city, setCity] = useState("");
+  const [weather, setWeather] = useState("");
+  const [temp, setTemp] = useState(0);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -37,10 +40,13 @@ export default function GeoLocation() {
     if (lat !== 0 && lon !== 0) {
       axios
         .get(
-          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m`
+          `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.REACT_APP_API_KEY}`
         )
         .then((response) => {
           console.log(response.data);
+          setCity(response.data.name);
+          setWeather(response.data.weather[0].main);
+          setTemp(response.data.main.temp);
         })
         .catch((error) => {
           console.log(error);
@@ -50,10 +56,15 @@ export default function GeoLocation() {
 
   return (
     <div>
-      GeoLocation
-      <div>Latitude: {lat}</div>
-      <div>Longitude: {lon}</div>
-      <div>{error ? error : null}</div>
+      <div>
+        <h1>{city}</h1>
+      </div>
+      <div>
+        <h2>{weather}</h2>
+      </div>
+      <div>
+        <h3>{temp}</h3>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import GeoLocation from "./GeoLocation/GeoLocation";
+import GeoLocation from "./WeatherApi/WeatherApi";
 
 function App() {
   return (
