@@ -7,10 +7,13 @@ export default function GeoLocation() {
   const [lon, setLon] = useState(0);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState("");
   const [description, setDescription] = useState("");
   const [temp, setTemp] = useState(0);
+  const [feelsLike, setFeelsLike] = useState(0);
+  const [humidity, setHumidity] = useState(0);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -52,6 +55,8 @@ export default function GeoLocation() {
           setTemp(Math.round(response.data.main.temp - 273.15));
           setDescription(response.data.weather[0].description);
           setIsLoaded(true);
+          setFeelsLike(Math.round(response.data.main.feels_like - 273.15));
+          setHumidity(response.data.main.humidity);
         })
         .catch((error) => {
           console.log(error);
@@ -60,57 +65,61 @@ export default function GeoLocation() {
   }, [lat, lon]);
 
   return (
-    <div className='weather-container'>
-      {isLoaded ? (
-        <div>
-          <div className='city'>
-            <h1>You're in : {city}</h1>
+    <div>
+      <div className='weather-container'>
+        {isLoaded ? (
+          <div>
+            <div className='city'>
+              <h1>You're in : {city}</h1>
+            </div>
+            <div className='weather-description'>
+              <h2>{weather}</h2>{" "}
+              <h2>
+                {description.charAt(0).toUpperCase() + description.slice(1)}
+              </h2>
+              {weather === "Clouds" && (
+                <img
+                  src='https://img.icons8.com/ultraviolet/40/000000/cloud.png'
+                  alt='cloud'
+                />
+              )}
+              {weather === "Clear" && (
+                <img
+                  src='https://img.icons8.com/ultraviolet/40/000000/summer.png'
+                  alt='sun'
+                />
+              )}
+              {weather === "Rain" && (
+                <img
+                  src='https://img.icons8.com/ultraviolet/40/000000/light-rain-2.png'
+                  alt='rain'
+                />
+              )}
+              {weather === "Snow" && (
+                <img
+                  src='https://img.icons8.com/ultraviolet/40/000000/winter.png'
+                  alt='snow'
+                />
+              )}
+              {weather === "Thunderstorm" && (
+                <img
+                  src='https://img.icons8.com/color/48/000000/thunderstorm.png'
+                  alt='thunderstorm'
+                />
+              )}
+            </div>
+            <div className='temp'>
+              <h2>{`${temp} \u00B0  Feels like : ${feelsLike}`} </h2>
+              <h2>{`Humidity: ${humidity}`}</h2>
+            </div>
           </div>
-          <div className='weather-description'>
-            <h2>{weather}</h2>{" "}
-            <h2>
-              {description.charAt(0).toUpperCase() + description.slice(1)}
-            </h2>
-            {weather === "Clouds" && (
-              <img
-                src='https://img.icons8.com/color/48/000000/cloud.png'
-                alt='cloud'
-              />
-            )}
-            {weather === "Clear" && (
-              <img
-                src='https://img.icons8.com/color/48/000000/sun--v1.png'
-                alt='sun'
-              />
-            )}
-            {weather === "Rain" && (
-              <img
-                src='https://img.icons8.com/color/48/000000/rain.png'
-                alt='rain'
-              />
-            )}
-            {weather === "Snow" && (
-              <img
-                src='https://img.icons8.com/color/48/000000/snow.png'
-                alt='snow'
-              />
-            )}
-            {weather === "Thunderstorm" && (
-              <img
-                src='https://img.icons8.com/color/48/000000/thunderstorm.png'
-                alt='thunderstorm'
-              />
-            )}
+        ) : (
+          <div className='loading'>
+            <h1>Loading...</h1>
+            {error && <h1>{error}</h1>}
           </div>
-          <div className='temp'>
-            <h2>{`${temp} \u00B0 `}</h2>
-          </div>
-        </div>
-      ) : (
-        <div className='loading'>
-          <h1>Loading...</h1>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
